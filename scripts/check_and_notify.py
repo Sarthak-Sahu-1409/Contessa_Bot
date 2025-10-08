@@ -58,7 +58,7 @@ if __name__ == '__main__':
         delta = (start_utc - now_utc).total_seconds()
         
         # Notify if contest starts within the next 2 hours (7200 seconds)
-        if 0 <= delta <= 50 * 60 * 60:
+        if 0 <= delta <= 2 * 60 * 60:
             resource = c['resource'].strip().lower()
             if resource in PLATFORMS:
                 
