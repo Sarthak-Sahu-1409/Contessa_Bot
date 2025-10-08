@@ -9,7 +9,7 @@ TG_TOKEN = os.environ['TELEGRAM_TOKEN']
 TG_CHAT  = os.environ['TELEGRAM_CHAT_ID']
 
 # Platforms to track (lowercase for safe comparison)
-PLATFORMS = ["codeforces", "codechef", "leetcode", "atcoder"]
+PLATFORMS = ["codeforces.com", "codechef.com", "leetcode.com", "atcoder.jp"]
 
 def fetch_upcoming():
     url = "https://clist.by/api/v2/contest/"
