@@ -7,7 +7,7 @@ from datetime import timezone
 USER = os.environ['CLIST_USER']
 KEY  = os.environ['CLIST_KEY']
 TG_TOKEN = os.environ['TELEGRAM_TOKEN']
-TG_CHAT  = os.environ['TELEGRAM_CHAT_ID']
+TG_CHATS = os.environ['TELEGRAM_CHAT_IDS'].split(",")  # Comma-separated chat IDs
 
 # Platforms to track 
 PLATFORMS = ["codeforces.com", "codechef.com", "leetcode.com", "atcoder.jp"]
@@ -31,19 +31,20 @@ def fetch_upcoming():
         return []
 
 def send_telegram(text):
-    """Sends a message to the specified Telegram chat."""
+    """Sends a message to all specified Telegram chats."""
     url = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
-    payload = {
-        "chat_id": TG_CHAT,
-        "text": text,
-        "parse_mode": "HTML" 
-    }
-    try:
-        response = requests.post(url, json=payload)
-        response.raise_for_status()
-        print(f"Successfully sent notification for a contest.")
-    except requests.exceptions.RequestException as e:
-        print(f"Error sending message to Telegram: {e}")
+    for chat_id in TG_CHATS:
+        payload = {
+            "chat_id": chat_id.strip(),  # Remove any accidental spaces
+            "text": text,
+            "parse_mode": "HTML"
+        }
+        try:
+            response = requests.post(url, json=payload)
+            response.raise_for_status()
+            print(f"Successfully sent notification to chat ID {chat_id}.")
+        except requests.exceptions.RequestException as e:
+            print(f"Error sending message to chat ID {chat_id}: {e}")
 
 if __name__ == '__main__':
     now_utc = datetime.datetime.now(timezone.utc)
@@ -56,13 +57,10 @@ if __name__ == '__main__':
         start_utc = datetime.datetime.fromisoformat(c['start']).replace(tzinfo=timezone.utc)
         delta = (start_utc - now_utc).total_seconds()
         
-        # --- LOGIC CHANGE HERE ---
-        # Check if the contest starts within the next 2 hours (7200 seconds)
+        # Notify if contest starts within the next 2 hours (7200 seconds)
         if 0 <= delta <= 2 * 60 * 60:
             resource = c['resource'].strip().lower()
             if resource in PLATFORMS:
-                
-                # --- PERSONALIZED MESSAGE ---
                 
                 # Convert UTC time to IST (UTC+5:30)
                 ist_timezone = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
