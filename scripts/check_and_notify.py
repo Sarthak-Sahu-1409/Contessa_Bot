@@ -17,7 +17,7 @@ def fetch_upcoming():
     params = {
         "username": USER,
         "api_key": KEY,
-        "limit": 100,  # Increase limit to cover all contests within a day
+        "limit": 100,
         "start__gte": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S"),
         "order_by": "start"
     }
@@ -36,12 +36,13 @@ if __name__ == '__main__':
     for c in contests:
         start = datetime.datetime.fromisoformat(c['start'])
         delta = (start - now).total_seconds()
-        # Notify if contest starts within the next 24 hours (1 day)
+        # Notify if contest starts within the next 24 hours
         if 0 <= delta <= 24*60*60:
-            if c['resource']['name'] in PLATFORMS:
+            if c['resource'] in PLATFORMS:
                 msg = (
                     f"⏰ Upcoming Contest!\n\n"
-                    f"{c['event']} on {c['resource']['name']}\n"
-                    f"Starts at {c['start']} UTC (in ~{int(delta//3600)} hrs {int((delta%3600)//60)} mins)"
+                    f"{c['event']} on {c['resource']}\n"
+                    f"Starts at {c['start']} UTC "
+                    f"(in ~{int(delta//3600)} hrs {int((delta%3600)//60)} mins)"
                 )
                 send_telegram(msg)
