@@ -75,7 +75,7 @@ if __name__ == '__main__':
                 minutes, _ = divmod(remainder, 60)
                 
                 msg = (
-                    f"<b>🔔 Sarthak, Contest Alert! </b>\n\n"
+                    f"<b>🔔 Contest Alert! </b>\n\n"
                     f"<b>Contest:</b> {c['event']}\n"
                     f"<b>Platform:</b> {c['resource']}\n\n"
                     f"⏰ <b>Starts In:</b> {int(hours)} hrs {int(minutes)} mins\n"
