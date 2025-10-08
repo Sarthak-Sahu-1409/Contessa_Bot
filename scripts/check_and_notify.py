@@ -58,7 +58,7 @@ if __name__ == '__main__':
         
         # --- LOGIC CHANGE HERE ---
         # Check if the contest starts within the next 2 hours (7200 seconds)
-        if 0 <= delta <= 2 * 60 * 60:
+        if 0 <= delta <= 22 * 60 * 60:
             resource = c['resource'].strip().lower()
             if resource in PLATFORMS:
                 
