@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
     for c in contests:
         # Parse the contest start time from the API response
-        start_utc = datetime.datetime.fromisoformat(c['start'])
+        start_utc = datetime.datetime.fromisoformat(c['start']).replace(tzinfo=timezone.utc)
         delta = (start_utc - now_utc).total_seconds()
         
         # --- LOGIC CHANGE HERE ---
