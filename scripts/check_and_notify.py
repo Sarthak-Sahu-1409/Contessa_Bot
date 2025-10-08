@@ -8,10 +8,9 @@ KEY  = os.environ['CLIST_KEY']
 TG_TOKEN = os.environ['TELEGRAM_TOKEN']
 TG_CHAT  = os.environ['TELEGRAM_CHAT_ID']
 
-# Platforms to track
-PLATFORMS = ["Codeforces", "CodeChef", "LeetCode", "AtCoder"]
+# Platforms to track (lowercase for safe comparison)
+PLATFORMS = ["codeforces", "codechef", "leetcode", "atcoder"]
 
-# Fetch upcoming contests from CLIST API
 def fetch_upcoming():
     url = "https://clist.by/api/v2/contest/"
     params = {
@@ -25,7 +24,6 @@ def fetch_upcoming():
     r.raise_for_status()
     return r.json().get("objects", [])
 
-# Send Telegram message
 def send_telegram(text):
     url = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
     requests.post(url, json={"chat_id": TG_CHAT, "text": text})
@@ -33,12 +31,17 @@ def send_telegram(text):
 if __name__ == '__main__':
     now = datetime.datetime.utcnow()
     contests = fetch_upcoming()
+    
     for c in contests:
+        # Debug: see what 'resource' is
+        print(c['resource'], c['event'], c['start'])
+        
         start = datetime.datetime.fromisoformat(c['start'])
         delta = (start - now).total_seconds()
-        # Notify if contest starts within the next 24 hours
+        
         if 0 <= delta <= 24*60*60:
-            if c['resource'] in PLATFORMS:
+            # Case-insensitive check
+            if c['resource'].strip().lower() in PLATFORMS:
                 msg = (
                     f"⏰ Upcoming Contest!\n\n"
                     f"{c['event']} on {c['resource']}\n"
