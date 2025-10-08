@@ -58,7 +58,7 @@ if __name__ == '__main__':
         
         # --- LOGIC CHANGE HERE ---
         # Check if the contest starts within the next 2 hours (7200 seconds)
-        if 0 <= delta <= 22 * 60 * 60:
+        if 0 <= delta <= 2 * 60 * 60:
             resource = c['resource'].strip().lower()
             if resource in PLATFORMS:
                 
@@ -77,7 +77,7 @@ if __name__ == '__main__':
                 minutes, _ = divmod(remainder, 60)
                 
                 msg = (
-                    f"<b>🚀 Sarthak, Contest Alert! 🚀</b>\n\n"
+                    f"<b>🔔 Sarthak, Contest Alert! </b>\n\n"
                     f"<b>Contest:</b> {c['event']}\n"
                     f"<b>Platform:</b> {c['resource']}\n\n"
                     f"⏰ <b>Starts In:</b> {int(hours)} hrs {int(minutes)} mins\n"
